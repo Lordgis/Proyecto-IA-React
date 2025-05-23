@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-export default function Login() 
-{const [nombre, setNombre] = useState("");
+export default function Login() {
+  const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [usuario, setUsuario] = useState(null);
@@ -11,19 +10,20 @@ export default function Login()
 
   const navigate = useNavigate();
 
-
   const manejarRegistro = (e) => {
-  e.preventDefault();
-  if (!correo.trim() || !contrasena.trim()) return;
-  setUsuario({ nombre, correo, contrasena });
-  setRegistrado(true);
-  navigate("/menu"); // ✅ Redirección al menú
-};
+    e.preventDefault();
+    if (!correo.trim() || !contrasena.trim()) return;
 
+    // Simula que se registra el usuario
+    setUsuario({ nombre, correo, contrasena });
+    setRegistrado(true);
+
+    // Redirecciona al menú
+    navigate("/menu");
+  };
 
   const manejarOlvidoContrasena = () => {
     alert("🔐 Funcionalidad para recuperar contraseña próximamente.");
-    // También puedes usar: navigate("/recuperar-contrasena");
   };
 
   return (
@@ -76,9 +76,6 @@ export default function Login()
           <div style={resultado}>
             <h3>✅ Bienvenido</h3>
             <p>
-              <strong>Nombre:</strong> {usuario.nombre}
-            </p>
-            <p>
               <strong>Correo:</strong> {usuario.correo}
             </p>
           </div>
@@ -88,7 +85,7 @@ export default function Login()
   );
 }
 
-// Estilos (los existentes se mantienen)
+// Estilos
 const container = {
   display: "flex",
   minHeight: "100vh",

@@ -1,280 +1,395 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Menu() {
-  const [submenu, setSubmenu] = useState({
-    productos: false,
-    facturas: false,
-  });
+  const [openSubmenu, setOpenSubmenu] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [fontSize, setFontSize] = useState(16);
 
   const toggleSubmenu = (menu) =>
-    setSubmenu({ ...submenu, [menu]: !submenu[menu] });
+    setOpenSubmenu((prev) => (prev === menu ? null : menu));
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
-  const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 24));
-  const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 12));
+  const increaseFont = () => setFontSize((f) => Math.min(f + 2, 24));
+  const decreaseFont = () => setFontSize((f) => Math.max(f - 2, 12));
 
   const theme = darkMode
     ? {
-        backgroundColor: "#121212",
-        textColor: "#f0f0f0",
-        sidebarBg: "#1a1a1a",
-        cardBg: "#1e1e1e",
-        navBg: "#333",
+        background: "#121212",
+        sidebarBg: "#1f1f1f",
+        text: "#e0e0e0",
+        hover: "#333",
+        activeBg: "#333",
       }
     : {
-        backgroundColor: "#f8f9fa",
-        textColor: "#333",
-        sidebarBg: "#ffffff",
-        cardBg: "#ffffff",
-        navBg: "#f0f0f0",
+        background: "#f9fafb",
+        sidebarBg: "#fff",
+        text: "#333",
+        hover: "#eee",
+        activeBg: "#ddd",
       };
+
+  const activeStyle = {
+    backgroundColor: theme.activeBg,
+    fontWeight: "600",
+    borderRadius: "6px",
+  };
 
   return (
     <div
       style={{
-        ...styles.app,
-        backgroundColor: theme.backgroundColor,
-        color: theme.textColor,
+        display: "flex",
+        height: "100vh",
+        backgroundColor: theme.background,
+        color: theme.text,
         fontSize,
+        fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
       }}
     >
-      {/* Sidebar */}
-      <aside style={{ ...styles.sidebar, backgroundColor: theme.sidebarBg }}>
-        <div style={styles.sidebarHeader}>
-          <h2 style={styles.sidebarTitle}>Bienvenido Administrador</h2>
-        </div>
+      <aside
+        style={{
+          width: "250px",
+          backgroundColor: theme.sidebarBg,
+          padding: "1rem",
+          boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        <header
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "700",
+            marginBottom: "1.5rem",
+            textAlign: "center",
+            borderBottom: `2px solid ${theme.hover}`,
+            paddingBottom: "0.5rem",
+          }}
+        >
+          👤 Administrador
+        </header>
 
-        <div style={styles.profile}>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
-            alt="user"
-            style={styles.avatar}
-          />
-        </div>
-
-        <nav style={styles.nav}>
-          <ul style={styles.navList}>
+        <nav style={{ flexGrow: 1 }}>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              userSelect: "none",
+            }}
+          >
+            {/* Registro */}
             <li>
-              <div
-                onClick={() => toggleSubmenu("productos")}
-                style={{ ...styles.navButton, backgroundColor: theme.navBg }}
+              <button
+                onClick={() => toggleSubmenu("registro")}
+                style={{
+                  width: "100%",
+                  padding: "10px 15px",
+                  background: "none",
+                  border: "none",
+                  color: theme.text,
+                  textAlign: "left",
+                  fontWeight: "600",
+                  fontSize: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  borderRadius: "6px",
+                  marginBottom: openSubmenu === "registro" ? "0.5rem" : "1rem",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = theme.hover)}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
               >
                 📄 Registro
-                <span>{submenu.productos ? "▲" : "▼"}</span>
-              </div>
-              {submenu.productos && (
-                <ul style={styles.submenu}>
-                  <li style={styles.submenuItem}>📄 Ver Alumnos</li>
-                  <li style={styles.submenuItem}>➕ Agregar Alumnos</li>
-                  <li style={styles.submenuItem}>📊 Ver Asistencia</li>
+                <span
+                  style={{
+                    transform:
+                      openSubmenu === "registro" ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s",
+                    display: "inline-block",
+                  }}
+                >
+                  ▼
+                </span>
+              </button>
+              {openSubmenu === "registro" && (
+                <ul
+                  style={{
+                    listStyle: "none",
+                    paddingLeft: "1.5rem",
+                    marginTop: 0,
+                    marginBottom: "1rem",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <li>
+                    <NavLink
+                      to=""
+                      style={({ isActive }) => ({
+                        display: "block",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        color: theme.text,
+                        marginBottom: "4px",
+                        ...(isActive ? activeStyle : {}),
+                      })}
+                    >
+                      📄 Ver Alumnos
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/agregar-alumnos"
+                      style={({ isActive }) => ({
+                        display: "block",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        color: theme.text,
+                        marginBottom: "4px",
+                        ...(isActive ? activeStyle : {}),
+                      })}
+                    >
+                      ➕ Agregar Alumnos
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/ver-asistencia"
+                      style={({ isActive }) => ({
+                        display: "block",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        color: theme.text,
+                        marginBottom: "4px",
+                        ...(isActive ? activeStyle : {}),
+                      })}
+                    >
+                      📊 Ver Asistencia
+                    </NavLink>
+                  </li>
                 </ul>
               )}
             </li>
 
+            {/* Cursos */}
             <li>
-              <div
-                onClick={() => toggleSubmenu("facturas")}
-                style={{ ...styles.navButton, backgroundColor: theme.navBg }}
+              <button
+                onClick={() => toggleSubmenu("cursos")}
+                style={{
+                  width: "100%",
+                  padding: "10px 15px",
+                  background: "none",
+                  border: "none",
+                  color: theme.text,
+                  textAlign: "left",
+                  fontWeight: "600",
+                  fontSize: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  borderRadius: "6px",
+                  marginBottom: openSubmenu === "cursos" ? "0.5rem" : "1rem",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = theme.hover)}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
               >
                 🧾 Cursos
-                <span>{submenu.facturas ? "▲" : "▼"}</span>
-              </div>
-              {submenu.facturas && (
-                <ul style={styles.submenu}>
-                  <li style={styles.submenuItem}>📚 Cursos Disponibles</li>
-                  <li style={styles.submenuItem}>🧾 Listar Factura</li>
+                <span
+                  style={{
+                    transform:
+                      openSubmenu === "cursos" ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s",
+                    display: "inline-block",
+                  }}
+                >
+                  ▼
+                </span>
+              </button>
+              {openSubmenu === "cursos" && (
+                <ul
+                  style={{
+                    listStyle: "none",
+                    paddingLeft: "1.5rem",
+                    marginTop: 0,
+                    marginBottom: "1rem",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <li>
+                    <NavLink
+                      to="/cursos-disponibles"
+                      style={({ isActive }) => ({
+                        display: "block",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        color: theme.text,
+                        marginBottom: "4px",
+                        ...(isActive ? activeStyle : {}),
+                      })}
+                    >
+                      📚 Cursos Disponibles
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/listar-factura"
+                      style={({ isActive }) => ({
+                        display: "block",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        textDecoration: "none",
+                        color: theme.text,
+                        marginBottom: "4px",
+                        ...(isActive ? activeStyle : {}),
+                      })}
+                    >
+                      🧾 Listar Factura
+                    </NavLink>
+                  </li>
                 </ul>
               )}
             </li>
 
-            <li style={{ ...styles.navButton, backgroundColor: theme.navBg }}>
-              👨‍🏫 Docente
+            {/* Links sin submenu */}
+            <li>
+              <NavLink
+                to="/docente"
+                style={({ isActive }) => ({
+                  display: "block",
+                  padding: "10px 15px",
+                  borderRadius: "6px",
+                  textDecoration: "none",
+                  color: theme.text,
+                  marginBottom: "0.7rem",
+                  fontWeight: isActive ? "600" : "normal",
+                  backgroundColor: isActive ? theme.activeBg : "transparent",
+                })}
+              >
+                👨‍🏫 Docente
+              </NavLink>
             </li>
-            <li style={{ ...styles.navButton, backgroundColor: theme.navBg }}>
-              🧾 Asistencia
+            <li>
+              <NavLink
+                to="/asistencia"
+                style={({ isActive }) => ({
+                  display: "block",
+                  padding: "10px 15px",
+                  borderRadius: "6px",
+                  textDecoration: "none",
+                  color: theme.text,
+                  marginBottom: "0.7rem",
+                  fontWeight: isActive ? "600" : "normal",
+                  backgroundColor: isActive ? theme.activeBg : "transparent",
+                })}
+              >
+                🧾 Asistencia
+              </NavLink>
             </li>
-            <li style={{ ...styles.navButton, backgroundColor: theme.navBg }}>
-              👥 Usuario
+            <li>
+              <NavLink
+                to="/usuario"
+                style={({ isActive }) => ({
+                  display: "block",
+                  padding: "10px 15px",
+                  borderRadius: "6px",
+                  textDecoration: "none",
+                  color: theme.text,
+                  marginBottom: "0.7rem",
+                  fontWeight: isActive ? "600" : "normal",
+                  backgroundColor: isActive ? theme.activeBg : "transparent",
+                })}
+              >
+                👥 Usuario
+              </NavLink>
             </li>
-            <li style={{ ...styles.navButton, backgroundColor: theme.navBg }}>
-              ⚙️ Configuración
+            <li>
+              <NavLink
+                to="/configuracion"
+                style={({ isActive }) => ({
+                  display: "block",
+                  padding: "10px 15px",
+                  borderRadius: "6px",
+                  textDecoration: "none",
+                  color: theme.text,
+                  fontWeight: isActive ? "600" : "normal",
+                  backgroundColor: isActive ? theme.activeBg : "transparent",
+                })}
+              >
+                ⚙️ Configuración
+              </NavLink>
             </li>
           </ul>
         </nav>
 
-        {/* Accesibilidad */}
-        <div style={styles.accessibilityControls}>
-          <div style={styles.fontControls}>
-            <button onClick={decreaseFont} style={styles.smallButton}>
-              ➖
+        <div
+          style={{
+            borderTop: `1px solid ${theme.hover}`,
+            paddingTop: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <button
+              onClick={decreaseFont}
+              style={{
+                background: "none",
+                border: "1px solid #888",
+                color: theme.text,
+                borderRadius: "4px",
+                padding: "3px 8px",
+                marginRight: "6px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              A-
             </button>
-            <button onClick={increaseFont} style={styles.smallButton}>
-              ➕
+            <button
+              onClick={increaseFont}
+              style={{
+                background: "none",
+                border: "1px solid #888",
+                color: theme.text,
+                borderRadius: "4px",
+                padding: "3px 8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              A+
             </button>
           </div>
-          <button onClick={toggleDarkMode} style={styles.themeButton}>
+          <button
+            onClick={toggleDarkMode}
+            style={{
+              background: "none",
+              border: "1px solid #888",
+              borderRadius: "50%",
+              width: "32px",
+              height: "32px",
+              cursor: "pointer",
+              color: theme.text,
+              fontSize: "1.2rem",
+              lineHeight: "0",
+              userSelect: "none",
+            }}
+            aria-label="Toggle Dark Mode"
+          >
             {darkMode ? "🌞" : "🌙"}
           </button>
         </div>
       </aside>
-
-      {/* Main Content */}
-      <main style={styles.main}>
-        <h1 style={styles.dashboardTitle}>Dashboard Administrador</h1>
-        <div style={styles.cards}>
-          <div style={{ ...styles.card, backgroundColor: theme.cardBg }}>
-            <h2>Total de Alumnos</h2>
-            <p>0</p>
-          </div>
-          <div style={{ ...styles.card, backgroundColor: theme.cardBg }}>
-            <h2>Porcentaje de Asistencia</h2>
-            <p>3</p>
-          </div>
-          <div style={{ ...styles.card, backgroundColor: theme.cardBg }}>
-            <h2>Total de Docentes</h2>
-            <p>3</p>
-          </div>
-        </div>
-
-        <div style={styles.graphSection}>
-          <div style={{ ...styles.graph, backgroundColor: theme.cardBg }}>
-            <h3>Gráfico de Alumnos</h3>
-            <p>Alumnos este semestre</p>
-          </div>
-          <div style={{ ...styles.graph, backgroundColor: theme.cardBg }}>
-            <h3>Gráfico de Asistencia</h3>
-          </div>
-        </div>
-      </main>
     </div>
   );
 }
-
-// Estilos
-const styles = {
-  app: {
-    display: "flex",
-    height: "100vh",
-    fontFamily: '"Segoe UI", sans-serif',
-    transition: "all 0.3s ease",
-  },
-  sidebar: {
-    width: "250px",
-    borderRight: "1px solid #e0e0e0",
-    display: "flex",
-    flexDirection: "column",
-    padding: "1rem",
-    position: "relative",
-  },
-  sidebarHeader: {
-    marginBottom: "1rem",
-  },
-  sidebarTitle: {
-    fontSize: "1.1rem",
-    fontWeight: "bold",
-  },
-  profile: {
-    textAlign: "center",
-    marginBottom: "2rem",
-  },
-  avatar: {
-    width: "60px",
-    borderRadius: "50%",
-    marginBottom: "0.5rem",
-  },
-  nav: {
-    flex: 1,
-  },
-  navList: {
-    listStyle: "none",
-    padding: 0,
-    margin: 0,
-  },
-  navButton: {
-    padding: "10px 15px",
-    margin: "6px 0",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontWeight: "500",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  submenu: {
-    listStyle: "none",
-    paddingLeft: "1rem",
-    marginTop: "0.3rem",
-  },
-  submenuItem: {
-    padding: "6px 10px",
-    borderRadius: "8px",
-    marginBottom: "4px",
-    backgroundColor: "#f9f9f9",
-    cursor: "pointer",
-    fontSize: "0.9rem",
-  },
-  main: {
-    flex: 1,
-    padding: "2rem",
-    overflowY: "auto",
-  },
-  dashboardTitle: {
-    fontSize: "1.8rem",
-    marginBottom: "1.5rem",
-  },
-  cards: {
-    display: "flex",
-    gap: "1rem",
-    marginBottom: "2rem",
-  },
-  card: {
-    padding: "1rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-    flex: 1,
-    textAlign: "center",
-  },
-  graphSection: {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-  },
-  graph: {
-    flex: 1,
-    minHeight: "150px",
-    padding: "1rem",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-  },
-  accessibilityControls: {
-    position: "absolute",
-    bottom: "20px",
-    left: "1rem",
-    right: "1rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  fontControls: {
-    display: "flex",
-    gap: "0.5rem",
-  },
-  smallButton: {
-    padding: "5px 10px",
-    fontSize: "1rem",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    backgroundColor: "#ddd",
-  },
-  themeButton: {
-    padding: "8px",
-    fontSize: "1.2rem",
-    border: "none",
-    borderRadius: "50%",
-    cursor: "pointer",
-    backgroundColor: "#ddd",
-  },
-};
