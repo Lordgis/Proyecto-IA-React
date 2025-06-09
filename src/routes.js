@@ -1,24 +1,22 @@
-// src/routes.js
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
-import Dashboard from './templates/dashboard/Dashboard';
+import Dashboard from './templates/dashboard/Dashboard'; // asegúrate que existe
+import Asistencias from './page/Asistencias';
+import Usuarios from './page/Usuarios';
+import Login from './templates/Login/Login';
+import SideBar from './templates/SideBar/SideBar';
 
-const router = createBrowserRouter([
+export const routes = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Login />,
+  },
+  {
+    path: '/',
+    element: <SideBar />,
     children: [
-      {
-        index: true,
-        element: <Dashboard />
-      }
-    ]
-  }
-], {
-  future: {
-    v7_startTransition: true,
-    v7_relativeSplatPath: true
-  }
-});
-
-export default router;
+      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'asistencias', element: <Asistencias /> },
+      { path: 'usuarios', element: <Usuarios /> },
+    ],
+  },
+]);

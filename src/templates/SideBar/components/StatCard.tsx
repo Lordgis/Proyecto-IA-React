@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,7 +9,15 @@ import Typography from '@mui/material/Typography';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 import { areaElementClasses } from '@mui/x-charts/LineChart';
 
-function getDaysInMonth(month, year) {
+export type StatCardProps = {
+  title: string;
+  value: string;
+  interval: string;
+  trend: 'up' | 'down' | 'neutral';
+  data: number[];
+};
+
+function getDaysInMonth(month: number, year: number) {
   const date = new Date(year, month, 0);
   const monthName = date.toLocaleDateString('en-US', {
     month: 'short',
@@ -25,7 +32,7 @@ function getDaysInMonth(month, year) {
   return days;
 }
 
-function AreaGradient({ color, id }) {
+function AreaGradient({ color, id }: { color: string; id: string }) {
   return (
     <defs>
       <linearGradient id={id} x1="50%" y1="0%" x2="50%" y2="100%">
@@ -36,14 +43,15 @@ function AreaGradient({ color, id }) {
   );
 }
 
-AreaGradient.propTypes = {
-  color: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-};
-
-function StatCard({ title, value, interval, trend, data }) {
+export default function StatCard({
+  title,
+  value,
+  interval,
+  trend,
+  data,
+}: StatCardProps) {
   const theme = useTheme();
-  const daysInWeek = getDaysInMonth(4, 2024); // Puedes ajustar esto si deseas otro mes o año
+  const daysInWeek = getDaysInMonth(4, 2024);
 
   const trendColors = {
     up:
@@ -61,9 +69,9 @@ function StatCard({ title, value, interval, trend, data }) {
   };
 
   const labelColors = {
-    up: 'success',
-    down: 'error',
-    neutral: 'default',
+    up: 'success' as const,
+    down: 'error' as const,
+    neutral: 'default' as const,
   };
 
   const color = labelColors[trend];
@@ -103,7 +111,7 @@ function StatCard({ title, value, interval, trend, data }) {
               showTooltip
               xAxis={{
                 scaleType: 'band',
-                data: daysInWeek,
+                data: daysInWeek, // Use the correct property 'data' for xAxis
               }}
               sx={{
                 [`& .${areaElementClasses.root}`]: {
@@ -119,13 +127,3 @@ function StatCard({ title, value, interval, trend, data }) {
     </Card>
   );
 }
-
-StatCard.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  interval: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  trend: PropTypes.oneOf(['down', 'neutral', 'up']).isRequired,
-  value: PropTypes.string.isRequired,
-};
-
-export default StatCard;
