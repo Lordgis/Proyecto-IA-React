@@ -1,25 +1,15 @@
-// routes.js
-import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
-import Dashboard from './templates/dashboard/Dashboard';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Dashboard from '../../pages/Dashboard';
+import Estudiantes from '../../pages/Estudiantes';
+import Asistencias from '../../pages/Asistencias';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    // Puedes agregar rutas hijas aquí si las tienes
-    children: [
-      {
-        index: true,
-        element: <Dashboard />
-      }
-    ]
-  }
-], {
-  future: {
-    v7_startTransition: true,
-    v7_relativeSplatPath: true
-  }
-});
-
-export default router;
+export default function MainGrid() {
+  return (
+    <Routes>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/estudiantes" element={<Estudiantes />} />
+      <Route path="/asistencias" element={<Asistencias />} />
+    </Routes>
+  );
+}

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -9,8 +8,15 @@ import Typography from '@mui/material/Typography';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import MenuButton from './MenuButton';
+import MenuContent from './MenuContent';
+import CardAlert from './CardAlert';
 
-function SideMenuMobile({ open, toggleDrawer }) {
+interface SideMenuMobileProps {
+  open: boolean | undefined;
+  toggleDrawer: (newOpen: boolean) => () => void;
+}
+
+export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
   return (
     <Drawer
       anchor="right"
@@ -50,7 +56,11 @@ function SideMenuMobile({ open, toggleDrawer }) {
           </MenuButton>
         </Stack>
         <Divider />
-       
+        <Stack sx={{ flexGrow: 1 }}>
+          <MenuContent />
+          <Divider />
+        </Stack>
+        <CardAlert />
         <Stack sx={{ p: 2 }}>
           <Button variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />}>
             Logout
@@ -60,10 +70,3 @@ function SideMenuMobile({ open, toggleDrawer }) {
     </Drawer>
   );
 }
-
-SideMenuMobile.propTypes = {
-  open: PropTypes.bool,
-  toggleDrawer: PropTypes.func.isRequired,
-};
-
-export default SideMenuMobile;

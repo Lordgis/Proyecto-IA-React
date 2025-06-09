@@ -1,11 +1,12 @@
 // src/components/SideMenu.js
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import OptionsMenu from './OptionsMenu';
+import Typography from '@mui/material/Typography';
 
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -20,6 +21,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import FaceIcon from '@mui/icons-material/Face';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import WarningIcon from '@mui/icons-material/Warning'; // Para alertas
 
 const drawerWidth = 240;
 
@@ -58,6 +60,7 @@ function MenuContent() {
         <ListItemIcon><CalendarTodayIcon /></ListItemIcon>
         <ListItemText primary="Asistencias" />
       </ListItemButton>
+
 
       <ListItemButton component={NavLink} to="/reconocimiento" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
         <ListItemIcon><FaceIcon /></ListItemIcon>
@@ -109,7 +112,6 @@ export default function SideMenu() {
           borderColor: 'divider',
         }}
       >
-        <OptionsMenu />
       </Stack>
     </Drawer>
   );

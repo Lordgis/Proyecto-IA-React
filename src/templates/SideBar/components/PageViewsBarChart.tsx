@@ -7,48 +7,20 @@ import Stack from '@mui/material/Stack';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '@mui/material/styles';
 
-export default function AttendanceBarChart({
-  title = 'Registro mensual de asistencia',
-  subtitle = 'Asistencias, faltas y tardanzas durante los últimos 6 meses',
-  mainValue = '1,024',
-  chipLabel = '+5%',
-  chipColor = 'success',
-  months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-  series = [
-    {
-      id: 'attendance',
-      label: 'Asistencias',
-      data: [950, 970, 990, 1000, 1010, 1020],
-      stack: 'A',
-    },
-    {
-      id: 'absences',
-      label: 'Faltas',
-      data: [20, 15, 10, 12, 8, 6],
-      stack: 'A',
-    },
-    {
-      id: 'lateness',
-      label: 'Tardanzas',
-      data: [10, 14, 12, 8, 6, 5],
-      stack: 'A',
-    },
-  ],
-}) {
+export default function PageViewsBarChart() {
   const theme = useTheme();
   const colorPalette = [
-    '#4caf50', // verde para asistencias
-    '#f44336', // rojo para faltas
-    '#ff9800', // naranja para tardanzas
+    (theme.vars || theme).palette.primary.dark,
+    (theme.vars || theme).palette.primary.main,
+    (theme.vars || theme).palette.primary.light,
   ];
-
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
       <CardContent>
         <Typography component="h2" variant="subtitle2" gutterBottom>
-          {title}
+          Page views and downloads
         </Typography>
-        <Stack sx={{ justifyContent: 'space-between', mb: 2 }}>
+        <Stack sx={{ justifyContent: 'space-between' }}>
           <Stack
             direction="row"
             sx={{
@@ -58,12 +30,12 @@ export default function AttendanceBarChart({
             }}
           >
             <Typography variant="h4" component="p">
-              {mainValue}
+              1.3M
             </Typography>
-            <Chip size="small" color={chipColor} label={chipLabel} />
+            <Chip size="small" color="error" label="-8%" />
           </Stack>
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            {subtitle}
+            Page views and downloads for the last 6 months
           </Typography>
         </Stack>
         <BarChart
@@ -73,16 +45,35 @@ export default function AttendanceBarChart({
             {
               scaleType: 'band',
               categoryGapRatio: 0.5,
-              data: months,
+              data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
               height: 24,
             },
           ]}
           yAxis={[{ width: 50 }]}
-          series={series}
+          series={[
+            {
+              id: 'page-views',
+              label: 'Page views',
+              data: [2234, 3872, 2998, 4125, 3357, 2789, 2998],
+              stack: 'A',
+            },
+            {
+              id: 'downloads',
+              label: 'Downloads',
+              data: [3098, 4215, 2384, 2101, 4752, 3593, 2384],
+              stack: 'A',
+            },
+            {
+              id: 'conversions',
+              label: 'Conversions',
+              data: [4051, 2275, 3129, 4693, 3904, 2038, 2275],
+              stack: 'A',
+            },
+          ]}
           height={250}
           margin={{ left: 0, right: 0, top: 20, bottom: 0 }}
           grid={{ horizontal: true }}
-          hideLegend={false}
+          hideLegend
         />
       </CardContent>
     </Card>

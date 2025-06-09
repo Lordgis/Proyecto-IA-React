@@ -1,13 +1,13 @@
 import * as React from 'react';
-
+import { Outlet } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppNavbar from './components/AppNavbar';
-import MainGrid from './components/MainGrid';
 import SideMenu from './components/SideMenu';
 import AppTheme from '../shared-theme/AppTheme';
+
 import {
   chartsCustomizations,
   dataGridCustomizations,
@@ -22,14 +22,14 @@ const xThemeComponents = {
   ...treeViewCustomizations,
 };
 
-export default function Dashboard(props) {
+export default function SideBar(props) {
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
         <SideMenu />
         <AppNavbar />
-        {/* Main content */}
+        {/* Contenido dinámico */}
         <Box
           component="main"
           sx={(theme) => ({
@@ -38,18 +38,13 @@ export default function Dashboard(props) {
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
               : alpha(theme.palette.background.default, 1),
             overflow: 'auto',
+            minHeight: '100vh',
+            padding: 3,
+            pt: 10,
           })}
         >
-          <Stack
-            spacing={2}
-            sx={{
-              alignItems: 'center',
-              mx: 3,
-              pb: 5,
-              mt: { xs: 8, md: 0 },
-            }}
-          >
-            <MainGrid />
+          <Stack spacing={2}>
+            <Outlet />
           </Stack>
         </Box>
       </Box>
