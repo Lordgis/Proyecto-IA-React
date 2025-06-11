@@ -14,11 +14,11 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/App',
+    path: '/menu',
     element: <SideBar />,
     children: [
       {
-        index: true, 
+        index: true, // se muestra por defecto al ir a /menu
         element: <Bienvenida />,
       },
       {

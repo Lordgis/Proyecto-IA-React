@@ -11,6 +11,7 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 import { gray } from '../../../shared-theme/themePrimitives';
 
 
+
 export const dataGridCustomizations = {
   MuiDataGrid: {
     styleOverrides: {
