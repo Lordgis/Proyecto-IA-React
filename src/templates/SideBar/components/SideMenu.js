@@ -1,96 +1,81 @@
 // src/components/SideMenu.js
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
+import {
+  Box,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Avatar,
+} from '@mui/material';
+
+import {
+  Dashboard as DashboardIcon,
+  People as PeopleIcon,
+  CalendarToday as CalendarTodayIcon,
+  Face as FaceIcon,
+  BarChart as BarChartIcon,
+  Settings as SettingsIcon,
+} from '@mui/icons-material';
+
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-
 import { NavLink } from 'react-router-dom';
-
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import FaceIcon from '@mui/icons-material/Face';
-import SettingsIcon from '@mui/icons-material/Settings';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import WarningIcon from '@mui/icons-material/Warning'; // Para alertas
 
 const drawerWidth = 240;
 
-const Drawer = styled(MuiDrawer)({
+const Drawer = styled(MuiDrawer)(({ theme }) => ({
   width: drawerWidth,
   flexShrink: 0,
-  boxSizing: 'border-box',
   [`& .${drawerClasses.paper}`]: {
     width: drawerWidth,
     boxSizing: 'border-box',
+    backgroundColor: theme.palette.background.paper,
   },
-});
+}));
 
-const activeStyle = {
-  backgroundColor: '#1976d2',
-  color: 'white',
-  '& .MuiListItemIcon-root': {
-    color: 'white',
-  },
-};
+const navItems = [
+  { text: 'Panel', icon: <DashboardIcon />, to: 'dashboard' },
+  { text: 'Estudiantes', icon: <PeopleIcon />, to: 'estudiantes' },
+  { text: 'Asistencias', icon: <CalendarTodayIcon />, to: 'asistencias' },
+  { text: 'Reconocimiento IA', icon: <FaceIcon />, to: 'registro' },
+  { text: 'Reportes', icon: <BarChartIcon />, to: 'reportes' },
+  { text: 'Configuración', icon: <SettingsIcon />, to: 'configuracion' },
+];
 
 function MenuContent() {
   return (
     <List sx={{ flex: 1 }}>
-      <ListItemButton component={NavLink} to="/dashboard" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><DashboardIcon /></ListItemIcon>
-        <ListItemText primary="Panel" />
-      </ListItemButton>
-
-      <ListItemButton component={NavLink} to="/usuarios" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><PeopleIcon /></ListItemIcon>
-        <ListItemText primary="Estudiantes" />
-      </ListItemButton>
-
-      <ListItemButton component={NavLink} to="/asistencias" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><CalendarTodayIcon /></ListItemIcon>
-        <ListItemText primary="Asistencias" />
-      </ListItemButton>
-
-
-      <ListItemButton component={NavLink} to="/reconocimiento" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><FaceIcon /></ListItemIcon>
-        <ListItemText primary="Reconocimiento IA" />
-      </ListItemButton>
-
-      <ListItemButton component={NavLink} to="/reportes" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><BarChartIcon /></ListItemIcon>
-        <ListItemText primary="Reportes" />
-      </ListItemButton>
-
-      <ListItemButton component={NavLink} to="/configuracion" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-        <ListItemIcon><SettingsIcon /></ListItemIcon>
-        <ListItemText primary="Configuración" />
-      </ListItemButton>
+      {navItems.map(({ text, icon, to }) => (
+        <ListItemButton
+          key={to}
+          component={NavLink}
+          to={to}
+          sx={({ isActive }) =>
+            isActive
+              ? {
+                  backgroundColor: '#1976d2',
+                  color: 'white',
+                  '& .MuiListItemIcon-root': {
+                    color: 'white',
+                  },
+                }
+              : undefined
+          }
+        >
+          <ListItemIcon>{icon}</ListItemIcon>
+          <ListItemText primary={text} />
+        </ListItemButton>
+      ))}
     </List>
   );
 }
 
 export default function SideMenu() {
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        display: { xs: 'none', md: 'block' },
-        [`& .${drawerClasses.paper}`]: {
-          backgroundColor: 'background.paper',
-        },
-      }}
-    >
+    <Drawer variant="permanent">
       <Divider />
       <Box
         sx={{
@@ -112,6 +97,7 @@ export default function SideMenu() {
           borderColor: 'divider',
         }}
       >
+        {/* Espacio para avatar o usuario si lo deseas */}
       </Stack>
     </Drawer>
   );

@@ -1,65 +1,175 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import {
+  Eye,
+  Edit,
+  Trash2,
+} from "lucide-react";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Paper,
+  Grid,
+} from "@mui/material";
+import axios from "axios";
 
-export default function Usuarios() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [loading, setLoading] = useState(true);
+const TablaUsuarios = () => {
+  const [asistencias, setAsistencias] = useState([]);
+  const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  // Acciones
+  const handleView = (usuario) => {
+    console.log("Ver usuario:", usuario);
+    // Aquí puedes abrir un modal o redirigir a una vista de detalles
+  };
 
-    fetch('http://localhost:5000/usuarios', { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error('Error al obtener los usuarios');
-        return res.json();
-      })
-      .then((data) => {
-        setUsuarios(data);
-        setLoading(false);
+  const handleEdit = (usuario) => {
+    console.log("Editar usuario:", usuario);
+    // Aquí puedes redirigir a un formulario de edición
+  };
+
+  const handleDelete = (usuario) => {
+    console.log("Eliminar usuario:", usuario);
+    // Aquí puedes mostrar un diálogo de confirmación y hacer el delete a tu API
+  };
+
+  const columns = [
+    {
+      field: "nombre_completo",
+      headerName: "Nombre del Usuario",
+      minWidth: 350,
+    },
+    {
+      field: "correo",
+      headerName: "Correo",
+      width: 250,
+    },
+    {
+      field: "estado",
+      headerName: "Estado",
+      width: 120,
+      cellClassName: (params) =>
+        params.value === "activo" ? "estado-activo" : "estado-otro",
+    },
+    {
+      field: "acciones",
+      headerName: "Acciones",
+      width: 180,
+      sortable: false,
+      filterable: false,
+      disableExport: true,
+      renderCell: (params) => {
+        const usuario = params.row;
+
+        return (
+          <div className="flex justify-center space-x-2 w-full">
+            <button
+              onClick={() => handleView(usuario)}
+              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-xl transition-all duration-200 shadow-sm border border-blue-200 hover:border-blue-300"
+              title="Ver detalles"
+            >
+              <Eye className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => handleEdit(usuario)}
+              className="p-2 text-green-600 hover:text-green-800 hover:bg-green-100 rounded-xl transition-all duration-200 shadow-sm border border-green-200 hover:border-green-300"
+              title="Editar estudiante"
+            >
+              <Edit className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => handleDelete(usuario)}
+              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-xl transition-all duration-200 shadow-sm border border-red-200 hover:border-red-300"
+              title="Eliminar estudiante"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/usuarios")
+      .then((response) => {
+        const datos = response.data.map((item, index) => ({
+          ...item,
+          id: item.id_usuario || index,
+        }));
+        setAsistencias(datos);
+        setCargando(false);
       })
       .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setError('No se pudieron cargar los usuarios.');
-          setLoading(false);
-        }
+        console.error("Error al cargar usuarios:", err);
+        setError("No se pudieron cargar los registros.");
+        setCargando(false);
       });
-
-    return () => controller.abort();
   }, []);
 
-  if (loading) return <p className="text-center text-blue-600 mt-6 animate-pulse">Cargando usuarios...</p>;
-  if (error) return <p className="text-center text-red-600 mt-6">{error}</p>;
-  if (!usuarios.length) return <p className="text-center text-gray-500 mt-6">No hay usuarios registrados.</p>;
-
   return (
-    <div className="max-w-5xl mx-auto mt-12 px-4">
-      <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">Listado de Usuarios</h2>
+    <Box sx={{ p: 0 }}>
+      <Grid container justifyContent="center" mb={3}>
+        <Typography variant="h4" align="center">
+          Registro de usuarios
+        </Typography>
+      </Grid>
 
-      <div className="overflow-x-auto shadow-md rounded-lg">
-        <table className="min-w-full border border-gray-200 bg-white">
-          <thead className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Nombre</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Correo</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase">Rol</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios.map(({ nombre_usuario, correo, rol }, i) => (
-              <tr
-                key={i}
-                className={`border-b border-gray-200 ${
-                  i % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                } hover:bg-gray-100 transition-colors`}
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-gray-900 font-medium">{nombre_usuario}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-700">{correo}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-600 capitalize">{rol}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      {cargando ? (
+        <Grid container justifyContent="center">
+          <CircularProgress />
+        </Grid>
+      ) : error ? (
+        <Typography color="error" align="center">
+          {error}
+        </Typography>
+      ) : (
+        <Grid container justifyContent="center">
+          <Paper
+            elevation={2}
+            sx={{
+              height: 600,
+              width: "100%",
+              maxWidth: "1000px",
+              p: 2,
+              borderRadius: 3,
+            }}
+          >
+            <DataGrid
+              rows={asistencias}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50]}
+              disableRowSelectionOnClick
+              sx={{
+                borderRadius: 2,
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#f0f0f0",
+                  fontWeight: "bold",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "#f9f9f9",
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "1px solid #e0e0e0",
+                },
+                "& .estado-activo": {
+                  color: "green",
+                  fontWeight: "bold",
+                },
+                "& .estado-otro": {
+                  color: "orange",
+                },
+              }}
+            />
+          </Paper>
+        </Grid>
+      )}
+    </Box>
   );
-}
+};
+
+export default TablaUsuarios;

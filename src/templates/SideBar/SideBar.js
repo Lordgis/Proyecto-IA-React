@@ -39,11 +39,11 @@ export default function SideBar(props) {
               : alpha(theme.palette.background.default, 1),
             overflow: 'auto',
             minHeight: '100vh',
-            padding: 3,
+            padding: 4,
             pt: 10,
           })}
         >
-          <Stack spacing={2}>
+          <Stack spacing={3}>
             <Outlet />
           </Stack>
         </Box>

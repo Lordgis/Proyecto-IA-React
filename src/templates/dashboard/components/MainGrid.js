@@ -3,8 +3,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Copyright from '../internals/components/Copyright';
-import CustomizedTreeView from './CustomizedTreeView';
 import PageViewsBarChart from './PageViewsBarChart';
 import StatCard from './StatCard';
 
@@ -57,7 +55,6 @@ export default function MainGrid() {
           <PageViewsBarChart />
         </Grid>
       </Grid>
-      <Copyright sx={{ my: 4 }} />
     </Box>
   );
 }
