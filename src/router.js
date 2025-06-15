@@ -11,10 +11,6 @@ const Bienvenida = () => <div style={{ padding: 24 }}>Bienvenido al sistema de a
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
-  },
-  {
-    path: '/menu',
     element: <SideBar />,
     children: [
       {
