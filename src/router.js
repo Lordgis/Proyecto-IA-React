@@ -6,15 +6,11 @@ import Login from './templates/Login/Login';
 import SideBar from './templates/SideBar/SideBar';
 import RegistroAsistencia from './page/RegistroAsistencia';
 
-const Bienvenida = () => <div style={{ padding: 24 }}>Bienvenido al sistema de asistencia</div>;
+const Bienvenida = () => <div style={{ padding: 24 }}>Bienvenido al Prototipo de asistencia Con IA</div>;
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
-  },
-  {
-    path: '/menu',
     element: <SideBar />,
     children: [
       {

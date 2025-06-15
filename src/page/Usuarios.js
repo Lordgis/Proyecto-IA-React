@@ -1,38 +1,85 @@
+// TablaUsuarios.js
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  Eye,
-  Edit,
-  Trash2,
-} from "lucide-react";
+import { Eye, Edit, Trash2 } from "lucide-react";
 import {
   Box,
   Typography,
   CircularProgress,
   Paper,
   Grid,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
+import CrearUsuarioModal from "../Modal/CrearUsuarioModal";
+import EditarUsuarioModal from "../Modal/EditarUsuarioModal";
 
 const TablaUsuarios = () => {
-  const [asistencias, setAsistencias] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [editarUsuario, setEditarUsuario] = useState(null);
+  const [confirmarEliminar, setConfirmarEliminar] = useState(null);
+  const [mensaje, setMensaje] = useState(null);
 
-  // Acciones
-  const handleView = (usuario) => {
-    console.log("Ver usuario:", usuario);
-    // Aquí puedes abrir un modal o redirigir a una vista de detalles
+  const cargarUsuarios = () => {
+    setCargando(true);
+    axios
+      .get("http://localhost:5000/usuarios")
+      .then((res) => {
+        const datos = res.data.map((item, index) => ({
+          ...item,
+          id: item.id || index,
+        }));
+        setUsuarios(datos);
+        setCargando(false);
+        setError(null);
+      })
+      .catch(() => {
+        setError("No se pudieron cargar los registros.");
+        setCargando(false);
+      });
+  };
+
+  useEffect(() => {
+    cargarUsuarios();
+  }, []);
+
+  const handleCrearUsuario = () => {
+    setEditarUsuario(null);
+    setModalAbierto(true);
   };
 
   const handleEdit = (usuario) => {
-    console.log("Editar usuario:", usuario);
-    // Aquí puedes redirigir a un formulario de edición
+    setEditarUsuario(usuario);
+    setModalAbierto(true);
   };
 
   const handleDelete = (usuario) => {
-    console.log("Eliminar usuario:", usuario);
-    // Aquí puedes mostrar un diálogo de confirmación y hacer el delete a tu API
+    setConfirmarEliminar(usuario);
+  };
+
+  const confirmarEliminarUsuario = () => {
+    axios
+      .delete(`http://localhost:5000/usuario/eliminar/${confirmarEliminar.id}`)
+      .then(() => {
+        cargarUsuarios();
+        setConfirmarEliminar(null);
+        setMensaje({
+          tipo: "success",
+          texto: "Usuario eliminado correctamente",
+        });
+      })
+      .catch(() => {
+        setMensaje({ tipo: "error", texto: "Error al eliminar el usuario." });
+      });
   };
 
   const columns = [
@@ -40,12 +87,9 @@ const TablaUsuarios = () => {
       field: "nombre_completo",
       headerName: "Nombre del Usuario",
       minWidth: 350,
+      flex: 1,
     },
-    {
-      field: "correo",
-      headerName: "Correo",
-      width: 250,
-    },
+    { field: "correo", headerName: "Correo", width: 250 },
     {
       field: "estado",
       headerName: "Estado",
@@ -62,29 +106,22 @@ const TablaUsuarios = () => {
       disableExport: true,
       renderCell: (params) => {
         const usuario = params.row;
-
         return (
           <div className="flex justify-center space-x-2 w-full">
             <button
-              onClick={() => handleView(usuario)}
-              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-xl transition-all duration-200 shadow-sm border border-blue-200 hover:border-blue-300"
+              onClick={() => alert(JSON.stringify(usuario, null, 2))}
               title="Ver detalles"
             >
-              <Eye className="h-4 w-4" />
+              <Eye className="h-4 w-4 text-blue-600" />
             </button>
-            <button
-              onClick={() => handleEdit(usuario)}
-              className="p-2 text-green-600 hover:text-green-800 hover:bg-green-100 rounded-xl transition-all duration-200 shadow-sm border border-green-200 hover:border-green-300"
-              title="Editar estudiante"
-            >
-              <Edit className="h-4 w-4" />
+            <button onClick={() => handleEdit(usuario)} title="Editar usuario">
+              <Edit className="h-4 w-4 text-green-600" />
             </button>
             <button
               onClick={() => handleDelete(usuario)}
-              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-xl transition-all duration-200 shadow-sm border border-red-200 hover:border-red-300"
-              title="Eliminar estudiante"
+              title="Eliminar usuario"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4 text-red-600" />
             </button>
           </div>
         );
@@ -92,30 +129,29 @@ const TablaUsuarios = () => {
     },
   ];
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/usuarios")
-      .then((response) => {
-        const datos = response.data.map((item, index) => ({
-          ...item,
-          id: item.id_usuario || index,
-        }));
-        setAsistencias(datos);
-        setCargando(false);
-      })
-      .catch((err) => {
-        console.error("Error al cargar usuarios:", err);
-        setError("No se pudieron cargar los registros.");
-        setCargando(false);
-      });
-  }, []);
-
   return (
     <Box sx={{ p: 0 }}>
-      <Grid container justifyContent="center" mb={3}>
-        <Typography variant="h4" align="center">
-          Registro de usuarios
-        </Typography>
+      <Grid
+        container
+        justifyContent="center"
+        mb={3}
+        alignItems="center"
+        spacing={2}
+      >
+        <Grid item xs={12} sm={8}>
+          <Typography variant="h4" align="center">
+            Registro de usuarios
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4} textAlign="center">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCrearUsuario}
+          >
+            Crear Usuario
+          </Button>
+        </Grid>
       </Grid>
 
       {cargando ? (
@@ -139,7 +175,7 @@ const TablaUsuarios = () => {
             }}
           >
             <DataGrid
-              rows={asistencias}
+              rows={usuarios}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10, 20, 50]}
@@ -168,6 +204,71 @@ const TablaUsuarios = () => {
           </Paper>
         </Grid>
       )}
+
+      {/* Modal crear/editar */}
+      {/* Modal crear */}
+{!editarUsuario && modalAbierto && (
+  <CrearUsuarioModal
+    abierto={modalAbierto}
+    onClose={() => setModalAbierto(false)}
+    onUsuarioCreado={() => {
+      cargarUsuarios();
+      setModalAbierto(false);
+    }}
+  />
+)}
+
+{/* Modal editar */}
+{editarUsuario && (
+  <EditarUsuarioModal
+    abierto={modalAbierto}
+    usuario={editarUsuario}
+    onClose={() => {
+      setModalAbierto(false);
+      setEditarUsuario(null);
+    }}
+    onUsuarioActualizado={() => {
+      cargarUsuarios();
+      setModalAbierto(false);
+      setEditarUsuario(null);
+    }}
+  />
+)}
+
+
+      {/* Confirmar eliminación */}
+      <Dialog
+        open={!!confirmarEliminar}
+        onClose={() => setConfirmarEliminar(null)}
+      >
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          ¿Seguro que quieres eliminar al usuario "
+          {confirmarEliminar?.nombre_completo}"?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmarEliminar(null)}>Cancelar</Button>
+          <Button color="error" onClick={confirmarEliminarUsuario}>
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar mensaje */}
+      <Snackbar
+        open={!!mensaje}
+        autoHideDuration={3000}
+        onClose={() => setMensaje(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setMensaje(null)}
+          severity={mensaje?.tipo}
+          sx={{ width: "100%" }}
+        >
+          {mensaje?.texto}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
