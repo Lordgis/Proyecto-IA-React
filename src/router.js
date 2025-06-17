@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Dashboard from './templates/dashboard/Dashboard';
+//import Dashboard from './templates/dashboard/Dashboard';
 import Asistencias from './page/Asistencias';
 import Usuarios from './page/Usuarios';
-import Login from './templates/Login/Login';
+//import Login from './templates/Login/Login';
 import SideBar from './templates/SideBar/SideBar';
 import RegistroAsistencia from './page/RegistroAsistencia';
 
@@ -17,10 +17,10 @@ export const router = createBrowserRouter([
         index: true, // se muestra por defecto al ir a /menu
         element: <Bienvenida />,
       },
-      {
+     /* {
         path: 'dashboard',
         element: <Dashboard />,
-      },
+      },*/
       {
         path: 'asistencias',
         element: <Asistencias />,

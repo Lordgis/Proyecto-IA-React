@@ -45,14 +45,12 @@ const navItems = [
   { text: "Estudiantes", icon: <PeopleIcon />, to: "estudiantes" },
   { text: "Asistencias", icon: <CalendarTodayIcon />, to: "asistencias" },
   { text: "Reconocimiento IA", icon: <FaceIcon />, to: "registro" },
-  { text: "Reportes", icon: <BarChartIcon />, to: "reportes" },
-  { text: "Configuración", icon: <SettingsIcon />, to: "configuracion" },
+  { text: "Reportes", icon: <BarChartIcon />, to: "" },
+  { text: "Configuración", icon: <SettingsIcon />, to: "" },
 ];
 
 function MenuContent() {
   return (
-
-    
     <List sx={{ flex: 1 }}>
       {navItems.map(({ text, icon, to }) => (
         <ListItemButton
@@ -62,12 +60,12 @@ function MenuContent() {
           sx={({ isActive }) =>
             isActive
               ? {
-                  backgroundColor: "#1976d2",
+                backgroundColor: "#1976d2",
+                color: "white",
+                "& .MuiListItemIcon-root": {
                   color: "white",
-                  "& .MuiListItemIcon-root": {
-                    color: "white",
-                  },
-                }
+                },
+              }
               : undefined
           }
         >
@@ -108,18 +106,16 @@ export default function SideMenu() {
       >
         {/* Espacio para avatar o usuario si lo deseas */}
       </Stack>
-      
-      
-            <Box
-              sx={{
-                display: 'flex',
-                mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-                p: 1.5,
-              }}
-            >
-              <SelectContent />
-            </Box>
 
+      <Box
+        sx={{
+          display: "flex",
+          mt: "calc(var(--template-frame-height, 0px) + 4px)",
+          p: 1.5,
+        }}
+      >
+        <SelectContent />
+      </Box>
     </Drawer>
   );
 }
