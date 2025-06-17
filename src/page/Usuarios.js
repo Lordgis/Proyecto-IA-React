@@ -207,34 +207,33 @@ const TablaUsuarios = () => {
 
       {/* Modal crear/editar */}
       {/* Modal crear */}
-{!editarUsuario && modalAbierto && (
-  <CrearUsuarioModal
-    abierto={modalAbierto}
-    onClose={() => setModalAbierto(false)}
-    onUsuarioCreado={() => {
-      cargarUsuarios();
-      setModalAbierto(false);
-    }}
-  />
-)}
+      {!editarUsuario && modalAbierto && (
+        <CrearUsuarioModal
+          abierto={modalAbierto}
+          onClose={() => setModalAbierto(false)}
+          onUsuarioCreado={() => {
+            cargarUsuarios();
+            setModalAbierto(false);
+          }}
+        />
+      )}
 
-{/* Modal editar */}
-{editarUsuario && (
-  <EditarUsuarioModal
-    abierto={modalAbierto}
-    usuario={editarUsuario}
-    onClose={() => {
-      setModalAbierto(false);
-      setEditarUsuario(null);
-    }}
-    onUsuarioActualizado={() => {
-      cargarUsuarios();
-      setModalAbierto(false);
-      setEditarUsuario(null);
-    }}
-  />
-)}
-
+      {/* Modal editar */}
+      {editarUsuario && (
+        <EditarUsuarioModal
+          abierto={modalAbierto}
+          usuario={editarUsuario}
+          onClose={() => {
+            setModalAbierto(false);
+            setEditarUsuario(null);
+          }}
+          onUsuarioActualizado={() => {
+            cargarUsuarios();
+            setModalAbierto(false);
+            setEditarUsuario(null);
+          }}
+        />
+      )}
 
       {/* Confirmar eliminación */}
       <Dialog

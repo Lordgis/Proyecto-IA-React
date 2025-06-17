@@ -85,7 +85,7 @@ const CrearUsuarioModal = ({ abierto, onClose, onUsuarioCreado }) => {
       formData.append("imagen", blob, "foto_usuario.jpg");
 
       const response = await axios.post(
-        "http://localhost:5000/api/usuarios/crear",
+        "http://localhost:5000/registrar",
         formData,
         {
           headers: {
