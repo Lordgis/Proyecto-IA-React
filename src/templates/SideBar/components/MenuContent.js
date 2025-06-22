@@ -17,8 +17,8 @@ const menuItems = [
   { text: 'Estudiantes', icon: <PeopleIcon />, path: 'estudiantes' },
   { text: 'Asistencias', icon: <CalendarTodayIcon />, path: 'asistencias' },
   { text: 'Reconocimiento IA', icon: <FaceIcon />, path: 'registro' },
-  { text: 'Reportes', icon: <BarChartIcon />, path: 'Reportes' },
-  { text: 'Configuración', icon: <SettingsIcon />, path: 'Configuracion' },
+  { text: 'Reportes', icon: <BarChartIcon />, path: '' },
+  { text: 'Configuración', icon: <SettingsIcon />, path: '' },
 ];
 
 export default function MenuContent({ open }) {

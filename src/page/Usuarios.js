@@ -140,7 +140,7 @@ const TablaUsuarios = () => {
       >
         <Grid item xs={12} sm={8}>
           <Typography variant="h4" align="center">
-            Registro de usuarios
+            Registro de Alumnos
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4} textAlign="center">
@@ -149,7 +149,7 @@ const TablaUsuarios = () => {
             color="primary"
             onClick={handleCrearUsuario}
           >
-            Crear Usuario
+            Agregar Alumnos
           </Button>
         </Grid>
       </Grid>

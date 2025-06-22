@@ -33,7 +33,7 @@ const CrearUsuarioModal = ({ abierto, onClose, onUsuarioCreado }) => {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
 
-  // Cuando el modal se abre, activamos la cámara
+  // Cuando el modal se abre, activamos la cámara 
   useEffect(() => {
     if (abierto) {
       setCamaraActiva(true);

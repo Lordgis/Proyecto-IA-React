@@ -45,7 +45,7 @@ const navItems = [
   { text: "Estudiantes", icon: <PeopleIcon />, to: "estudiantes" },
   { text: "Asistencias", icon: <CalendarTodayIcon />, to: "asistencias" },
   { text: "Reconocimiento IA", icon: <FaceIcon />, to: "registro" },
-  { text: "Reportes", icon: <BarChartIcon />, to: "" },
+  { text: "Reportes", icon: <BarChartIcon />, to: "reportes" },
   { text: "Configuración", icon: <SettingsIcon />, to: "" },
 ];
 
